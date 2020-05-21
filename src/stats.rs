@@ -90,7 +90,7 @@ impl<I> Stats<I> {
 
 impl<I> Default for Stats<I> { //because deriving it creates the unnecessary bound of I: Default
 	fn default() -> Self {
-		Self {
+		let mut r = Self {
 			pos: Default::default(),
 			vel: Default::default(),
 			mass: Default::default(),
@@ -99,9 +99,11 @@ impl<I> Default for Stats<I> { //because deriving it creates the unnecessary bou
 			atk: Default::default(),
 			str: Default::default(),
 			agi: Default::default(),
-			attack_cooldown: Default::default(), //when attacking, this is increased by (1 + attack_cooldown) / attack_speed , cannot attack if attack_cooldown > PLAYER_MAX_ATTACK_COOLDOWN
+			attack_cooldown: Default::default(),
 			equips: Default::default(),
 			inventory: Vec::new(),
-		}
+		};
+		r.hp = r.max_hp();
+		r
 	}
 }

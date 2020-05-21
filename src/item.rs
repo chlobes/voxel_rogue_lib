@@ -4,7 +4,6 @@ use crate::prelude::*;
 pub struct Item {
 	pub id: u32,
 	pub volume: f64,
-	pub durability: usize,
 	pub density: f64,
 	pub name: String,
 	pub properties: HashMap<String, String>,
