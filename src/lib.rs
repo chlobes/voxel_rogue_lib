@@ -54,3 +54,14 @@ impl From<String> for Event {
 		Event::Text(t)
 	}
 }
+
+use std::fmt;
+impl fmt::Display for Action {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		use Action::*;
+		match self {
+			Move(dir, max, jump) => write!(f,"move {}[{}]{}",dir.nice_fmt(5, false),max.nice_fmt(4, false),if *jump { ",jumping" } else { "" }),
+			Attack(hand, target) => write!(f,"attack {} with {} hand",target,if *hand { "right" } else { "left" }),
+		}
+	}
+}
