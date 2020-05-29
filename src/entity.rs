@@ -5,6 +5,7 @@ pub struct Entity {
 	pub id: u64,
 	pub typ: EntityType,
 	pub pos: Vec3<f64>,
+	pub hp: Option<f64>,
 	pub properties: HashMap<String, String>,
 }
 
