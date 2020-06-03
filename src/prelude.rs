@@ -48,3 +48,4 @@ pub const KINETIC_FRICTION: f64 = 2.0;
 //pub const QUADRATIC_DRAG: f64 = 0.01 * 1.01f64.powf(-PLAYER_BASE_MASS);
 pub const QUADRATIC_DRAG: f64 = 0.01 / 2.70481382942;
 pub const GRAVITY: f64 = 6.0;
+pub const PORTAL_SIZE: Vec3<f64> = Vec3{ x: 1.0, y: 1.0, z: 2.0, };
