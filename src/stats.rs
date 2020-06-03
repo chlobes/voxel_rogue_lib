@@ -50,7 +50,7 @@ impl<I> Stats<I> {
 	}
 	
 	pub fn jump_vel(&self) -> f64 {
-		self.agi_mul() * PLAYER_JUMP_VEL
+		self.agi_mul().sqrt() * PLAYER_JUMP_VEL
 	}
 	
 	pub fn jump_vel_hor(&self) -> f64 {
