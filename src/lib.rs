@@ -4,6 +4,7 @@ pub mod prelude;
 use prelude::*;
 pub mod item;
 pub mod entity;
+pub use entity::Entity;
 pub mod stats;
 pub use item::Item;
 
@@ -31,18 +32,6 @@ pub enum Event {
 	ClearBlocks,
 }
 
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
-pub struct ClientPacket {
-	pub ready: bool,
-	pub actions: Vec<(Action, f64)>, //time should be specified from 0 to 1, actions should be sorted from earliest to latest, actions will never be taken before the specified time, but may happen after, or not at all, interrupted actions will not be repeated, putting a time of 0 ensures an action is run as soon as the previous one finishes
-}
-
-#[derive(Debug,Clone,Serialize,Deserialize)]
-pub enum Action {
-	Move(Vec2<f64>, f64, bool), //(direction, max_acc, jumping?)
-	Attack(bool, u64), //(left or right hand, target)
-}
-
 impl From<HashMap<Vec3<i32>, u32>> for Event {
 	fn from(x: HashMap<Vec3<i32>, u32>) -> Self {
 		Event::Blocks(x)
@@ -55,13 +44,27 @@ impl From<String> for Event {
 	}
 }
 
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ClientPacket {
+	pub ready: bool,
+	pub actions: Vec<(Action, f64)>, //time should be specified from 0 to 1, actions should be sorted from earliest to latest, actions will never be taken before the specified time, but may happen after, or not at all, interrupted actions will not be repeated, putting a time of 0 ensures an action is run as soon as the previous one finishes
+}
+
+#[derive(Debug,Clone,Serialize,Deserialize)]
+pub enum Action {
+	Move(Vec2<f64>, f64, bool), //(direction, max_acc, jumping?)
+	Attack(u64, bool), //(target, left or right hand)
+	Pickup(u64, usize), //(target, index)
+}
+
 use std::fmt;
 impl fmt::Display for Action {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		use Action::*;
 		match self {
 			Move(dir, max, jump) => write!(f,"move {}[{}]{}",dir.nice_fmt(5, false),max.nice_fmt(4, false),if *jump { " jumping" } else { "" }),
-			Attack(hand, target) => write!(f,"attack {} with {} hand",target,if *hand { "right" } else { "left" }),
+			Attack(target, hand) => write!(f,"attack {} with {} hand",target,if *hand { "right" } else { "left" }),
+			Pickup(target, idx) => write!(f,"pickup item {} out of {}",idx,target),
 		}
 	}
 }

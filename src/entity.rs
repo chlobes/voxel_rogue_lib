@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::item::Item;
 
 #[derive(Debug,Clone,Serialize,Deserialize)]
 pub struct Entity {
@@ -13,6 +14,8 @@ pub struct Entity {
 pub enum EntityType {
 	Player,
 	Portal,
+	Mob(String, Model),
+	Item(Vec<Item>),
 }
 
 use std::fmt;
@@ -22,6 +25,11 @@ impl fmt::Display for Entity {
 		self.hp.map(|(hp, max)| r.push_str(&format!(" {}/{}",hp.nice_fmt(6, false),max.nice_fmt(6, false))));
 		for (name, prop) in self.properties.iter() {
 			r.push_str(&format!("\n{}: {}",name,prop));
+		}
+		if let EntityType::Item(i) = &self.typ {
+			for i in i.iter() {
+				r.push_str(&format!("\n{}",i));
+			}
 		}
 		write!(f,"{}",r)
 	}
@@ -33,6 +41,14 @@ impl fmt::Display for EntityType {
 		write!(f,"{}",match self {
 			Player => "player",
 			Portal => "portal",
+			Mob(name, _model) => name.as_str(),
+			Item(_items) => "item",
 		})
 	}
+}
+
+#[derive(Debug,Clone,Serialize,Deserialize)]
+pub struct Model {
+	pub size: Vec3<f64>,
+	pub color: [f32; 4],
 }

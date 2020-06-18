@@ -9,9 +9,10 @@ pub use serde_json::from_slice as deserialize;
 pub use serde_json::to_writer_pretty as serialize_into;
 pub use serde_json::from_reader as deserialize_from;
 
-pub use crate::{AuthInfo,ServerPacket,ClientPacket,Action};
-pub use crate::entity::{Entity,EntityType};
+pub use crate::{AuthInfo,ServerPacket,ClientPacket};
+pub use crate::entity::{EntityType,Model};
 pub use crate::stats::Stats;
+pub use crate::Event;
 
 pub macro l() {
 	&concat!(file!(), " ", line!())
@@ -32,20 +33,23 @@ pub fn deserialize_structymap<'de, D: serde::Deserializer<'de>, K: Deserialize<'
 }
 
 pub const TPS: usize = 100;
-pub const PLAYER_HITBOX_SIZE: Vec3<f64> = Vec3{ x: 0.3, y: 0.3, z: 0.6, };
-pub const PLAYER_BASE_MASS: f64 = 100.0;
-pub const PLAYER_BASE_HP: f64 = 50.0;
-pub const PLAYER_HP_REGEN: f64 = 0.0005; //as a fraction of max hp
-//pub const PLAYER_MOVESPEED: f64 = 4.0 * 1.01f64.powf(PLAYER_BASE_MASS);
-pub const PLAYER_MOVESPEED: f64 = 4.0 * 2.70481382942; //no const pow function for no reason thx rust
-pub const PLAYER_JUMP_VEL: f64 = 10.0;
-pub const PLAYER_JUMP_VEL_HOR: f64 = 6.0;
-pub const PLAYER_AIR_CONTROL: f64 = 0.1;
-pub const PLAYER_MAX_ATTACK_COOLDOWN: f64 = 2.0;
-pub const PLAYER_ATTACK_OUT_OF_RANGE_PENALTY: f64 = 0.1;
-pub const STATIC_FRICTION: f64 = 5.0;
-pub const KINETIC_FRICTION: f64 = 2.0;
-//pub const QUADRATIC_DRAG: f64 = 0.01 * 1.01f64.powf(-PLAYER_BASE_MASS);
-pub const QUADRATIC_DRAG: f64 = 0.01 / 2.70481382942;
+pub const BASE_HP: f64 = 20.0;
+pub const MAX_ATTACK_COOLDOWN: f64 = 2.0;
+pub const ATTACK_OUT_OF_RANGE_PENALTY: f64 = 0.1;
+pub const QUADRATIC_DRAG: f64 = 0.3;
 pub const GRAVITY: f64 = 6.0;
-pub const PORTAL_SIZE: Vec3<f64> = Vec3{ x: 1.0, y: 1.0, z: 2.0, };
+pub const FRICTION: f64 = 20.0;
+pub const BASE_FRICTION: f64 = 0.5; //friction applied is proportional to velocity + BASE_FRICTION
+pub const KNOCKBACK_STRENGTH: f64 = 10.0;
+
+pub const PLAYER_HITBOX_SIZE: Vec3<f64> = Vec3{ x: 0.3, y: 0.3, z: 0.6, };
+pub const PLAYER_HP_REGEN: f64 = 0.0005; //as a fraction of max hp
+pub const PLAYER_MOVESPEED: f64 = 4.0;
+pub const PLAYER_JUMP_VEL: f64 = 7.0;
+pub const PLAYER_JUMP_VEL_HOR: f64 = 3.0;
+pub const PLAYER_AIR_CONTROL: f64 = 0.2;
+pub const PICKUP_TIME: f64 = 0.2;
+pub const PICKUP_RANGE: f64 = 3.0;
+
+pub const PORTAL_SIZE: Vec3<f64> = Vec3{ x: 0.45, y: 0.45, z: 0.9, };
+pub const ITEM_SIZE: Vec3<f64> = Vec3{ x: 0.15, y: 0.15, z: 0.15 };

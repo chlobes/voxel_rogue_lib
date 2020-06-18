@@ -38,7 +38,7 @@ impl<I> Stats<I> {
 	}
 	
 	pub fn max_hp(&self) -> f64 {
-		PLAYER_BASE_HP * 1.01f64.powf(self.vit / 2.0)
+		50.0 * 1.01f64.powf(self.vit / 2.0)
 	}
 	
 	pub fn agi_mul(&self) -> f64 {
