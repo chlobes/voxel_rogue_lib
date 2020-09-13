@@ -13,6 +13,8 @@ pub use crate::{AuthInfo,ServerPacket,ClientPacket};
 pub use crate::entity::{EntityType,Model};
 pub use crate::stats::Stats;
 pub use crate::Event;
+pub use crate::item::ItemSlot;
+pub use crate::vertex::*;
 
 pub macro l() {
 	&concat!(file!(), " ", line!())
@@ -36,18 +38,19 @@ pub const TPS: usize = 100;
 pub const BASE_HP: f64 = 20.0;
 pub const MAX_ATTACK_COOLDOWN: f64 = 2.0;
 pub const ATTACK_OUT_OF_RANGE_PENALTY: f64 = 0.1;
-pub const QUADRATIC_DRAG: f64 = 0.3;
-pub const GRAVITY: f64 = 6.0;
-pub const FRICTION: f64 = 20.0;
-pub const BASE_FRICTION: f64 = 0.5; //friction applied is proportional to velocity + BASE_FRICTION
-pub const KNOCKBACK_STRENGTH: f64 = 10.0;
+pub const QUADRATIC_DRAG: f64 = 0.45;
+pub const GRAVITY: f64 = 9.8;
+pub const FRICTION: f64 = 35.0;
+pub const BASE_FRICTION: f64 = 0.8; //friction applied is proportional to velocity + BASE_FRICTION
+pub const KNOCKBACK_STRENGTH: f64 = 12.0;
+pub const EQUIP_MASS_MUL: [f64; 5] = [10.0, 10.0, 6.0, 3.0, 6.0]; //equipped weapon/offhand is heavier, equipped chest is lighter, which means base chests can be heavier and weapons can be lighter so carrying many weapons is viable but carrying many chests is not, overall equipped stuff is heavier which allows carrying extra gear being not tooooo much of a downside
 
 pub const PLAYER_HITBOX_SIZE: Vec3<f64> = Vec3{ x: 0.3, y: 0.3, z: 0.6, };
-pub const PLAYER_HP_REGEN: f64 = 0.0005; //as a fraction of max hp
-pub const PLAYER_MOVESPEED: f64 = 4.0;
-pub const PLAYER_JUMP_VEL: f64 = 7.0;
-pub const PLAYER_JUMP_VEL_HOR: f64 = 3.0;
-pub const PLAYER_AIR_CONTROL: f64 = 0.2;
+pub const PLAYER_HP_REGEN: f64 = 0.004; //as a fraction of max hp
+pub const PLAYER_MOVESPEED: f64 = 7.5;
+pub const PLAYER_JUMP_VEL: f64 = GRAVITY * 1.08;
+pub const PLAYER_JUMP_VEL_HOR: f64 = 4.5;
+pub const PLAYER_AIR_CONTROL: f64 = 0.3;
 pub const PICKUP_TIME: f64 = 0.2;
 pub const PICKUP_RANGE: f64 = 3.0;
 

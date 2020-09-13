@@ -7,6 +7,7 @@ pub mod entity;
 pub use entity::Entity;
 pub mod stats;
 pub use item::Item;
+pub mod vertex;
 
 #[derive(Debug,Copy,Clone,Serialize,Deserialize)]
 pub struct AuthInfo {
@@ -55,6 +56,8 @@ pub enum Action {
 	Move(Vec2<f64>, f64, bool), //(direction, max_acc, jumping?)
 	Attack(u64, bool), //(target, left or right hand)
 	Pickup(u64, usize), //(target, index)
+	Drop(usize),
+	Equip(ItemSlot, usize), //(equipment_slot, inventory_slot)
 }
 
 use std::fmt;
@@ -65,6 +68,8 @@ impl fmt::Display for Action {
 			Move(dir, max, jump) => write!(f,"move {}[{}]{}",dir.nice_fmt(5, false),max.nice_fmt(4, false),if *jump { " jumping" } else { "" }),
 			Attack(target, hand) => write!(f,"attack {} with {} hand",target,if *hand { "right" } else { "left" }),
 			Pickup(target, idx) => write!(f,"pickup item {} out of {}",idx,target),
+			Drop(idx) => write!(f,"drop item {}",idx),
+			Equip(es, is) => write!(f,"equip item {} in slot {}",is,es.display(false)),
 		}
 	}
 }

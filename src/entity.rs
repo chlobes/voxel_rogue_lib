@@ -10,6 +10,24 @@ pub struct Entity {
 	pub properties: HashMap<String, String>,
 }
 
+impl Entity {
+	pub fn detailed_info(&self) -> String {
+		let mut r = format!("type: {}",self.typ);
+		self.hp.map(|(hp, max)| r.push_str(&format!("\nhp: {}/{}({})",hp.nice_fmt(6, false),max.nice_fmt(6, false),(hp / max).nice_fmt(6, false))));
+		r.push_str(&format!("\nposition: {}",self.pos.nice_fmt(6, false)));
+		r.push_str(&format!("\nid: {}",self.id));
+		for (name, prop) in self.properties.iter() {
+			r.push_str(&format!("\n{}: {}",name,prop));
+		}
+		if let EntityType::Item(i) = &self.typ {
+			for i in i.iter() {
+				r.push_str(&format!("\n{}",i));
+			}
+		}
+		r
+	}
+}
+
 #[derive(Debug,Clone,Serialize,Deserialize)]
 pub enum EntityType {
 	Player,
@@ -21,11 +39,9 @@ pub enum EntityType {
 use std::fmt;
 impl fmt::Display for Entity {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		let mut r = format!("{}) {} {}",self.id,self.typ,self.pos.nice_fmt(6, false));
-		self.hp.map(|(hp, max)| r.push_str(&format!(" {}/{}",hp.nice_fmt(6, false),max.nice_fmt(6, false))));
-		for (name, prop) in self.properties.iter() {
-			r.push_str(&format!("\n{}: {}",name,prop));
-		}
+		let mut r = format!("{} {}",self.typ,self.pos.nice_fmt(6, false));
+		self.hp.map(|(hp, max)| if hp != max { r.push_str(&format!(" {}",(hp / max).nice_fmt(6, false))) });
+		self.properties.get(&"channel".to_string()).map(|c| r.push_str(&format!(" {}",c)));
 		if let EntityType::Item(i) = &self.typ {
 			for i in i.iter() {
 				r.push_str(&format!("\n{}",i));
@@ -50,5 +66,5 @@ impl fmt::Display for EntityType {
 #[derive(Debug,Clone,Serialize,Deserialize)]
 pub struct Model {
 	pub size: Vec3<f64>,
-	pub color: [f32; 4],
+	pub verts: Vec<Vertex>,
 }

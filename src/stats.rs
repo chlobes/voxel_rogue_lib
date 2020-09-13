@@ -4,12 +4,13 @@ use crate::prelude::*;
 pub struct Stats<I> {
 	pub pos: Vec3<f64>,
 	pub vel: Vec3<f64>,
-	pub mass: f64,
 	pub hp: f64,
-	pub vit: f64,
+	pub mass: f64,
+	pub agi: f64,
 	pub atk: f64,
 	pub str: f64,
-	pub agi: f64,
+	pub vit: f64,
+	pub con: f64,
 	pub attack_cooldown: f64, //when attacking, this is increased by (1 + attack_cooldown) / attack_speed , cannot attack if attack_cooldown > PLAYER_MAX_ATTACK_COOLDOWN
 	pub equips: [Option<I>; 5],
 	pub inventory: Vec<I>,
@@ -20,12 +21,13 @@ impl<I> Stats<I> {
 		let mut r = Stats {
 			pos: self.pos,
 			vel: self.vel,
-			mass: self.mass,
 			hp: self.hp,
-			vit: self.vit,
+			mass: self.mass,
+			agi: self.agi,
 			atk: self.atk,
 			str: self.str,
-			agi: self.agi,
+			vit: self.vit,
+			con: self.con,
 			attack_cooldown: self.attack_cooldown,
 			equips: Default::default(),
 			inventory: Vec::new(),
@@ -38,7 +40,7 @@ impl<I> Stats<I> {
 	}
 	
 	pub fn max_hp(&self) -> f64 {
-		50.0 * 1.01f64.powf(self.vit / 2.0)
+		BASE_HP * 1.01f64.powf(self.vit / 2.0)
 	}
 	
 	pub fn agi_mul(&self) -> f64 {
@@ -93,12 +95,13 @@ impl<I> Default for Stats<I> { //because deriving it creates the unnecessary bou
 		let mut r = Self {
 			pos: Default::default(),
 			vel: Default::default(),
-			mass: Default::default(),
 			hp: Default::default(),
-			vit: Default::default(),
+			mass: Default::default(),
+			agi: Default::default(),
 			atk: Default::default(),
 			str: Default::default(),
-			agi: Default::default(),
+			vit: Default::default(),
+			con: Default::default(),
 			attack_cooldown: Default::default(),
 			equips: Default::default(),
 			inventory: Vec::new(),
